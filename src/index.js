@@ -6,12 +6,16 @@ const input = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
+function clear() {
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
+}
+
 function fetchCountries(name) {
   return fetch(`https://restcountries.com/v3.1/name/${name}`)
     .then(response => {
       if (!response.ok) {
-        countryList.innerHTML = '';
-        countryInfo.innerHTML = '';
+        clear();
         return Notiflix.Notify.failure(
           'Oops, there is no country with that name'
         );
@@ -29,11 +33,14 @@ const onInput = e => {
   if (!countryName) {
     return;
   }
+
   fetchCountries(countryName)
     .then(r => {
+      if (input.value === '') {
+        clear();
+      }
       if (r.length > 10) {
-        countryList.innerHTML = '';
-        countryInfo.innerHTML = '';
+        clear();
         return Notiflix.Notify.info(
           'Too many matches found. Please enter a more specific name.'
         );
@@ -53,10 +60,10 @@ const onInput = e => {
     return country
       .map(
         ({ name, flags, capital, population, languages }) =>
-          `<div class = "country-item"><img src="${flags.svg}" alt="${
-            name.official
-          }" width='60' height='40'>
-        <h2 class="country-text">${name.official}</h2></div>
+          `<div class = "country-item">
+          <img src="${flags.svg}" alt="${name.official}" width='60' height='40'>
+        <h2>${name.official}</h2>
+        </div>
         <p><span class="country-text-bold">Capital:</span> ${capital}</p>
         <p><span class="country-text-bold">Population:</span> ${population}</p>
         <p><span class="country-text-bold">Languages:</span> ${Object.values(
@@ -72,7 +79,7 @@ const onInput = e => {
       .map(
         ({ name, flags }) =>
           `<li class = "country-item"><img src="${flags.svg}" alt="${name.official}" width='60' height='40'>
-        <p class="country-text">${name.official}</p></li>`
+        <p>${name.official}</p></li>`
       )
       .join('');
   }
