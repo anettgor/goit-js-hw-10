@@ -1,7 +1,7 @@
 # Country Search App
 
-This is a user-friendly React application that allows users to search for
-countries and get detailed information about them.
+This is a user-friendly JS application that allows users to search for countries
+and get detailed information about them.
 
 ## Features
 
